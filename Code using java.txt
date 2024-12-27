@@ -1,0 +1,183 @@
+import java.util.*;
+
+public class LibraryManagementSystem {
+    private static Map<Integer, Book> books = new HashMap<>();
+    private static Map<Integer, Patron> patrons = new HashMap<>();
+    private static List<Transaction> transactions = new ArrayList<>();
+    private static Scanner scanner = new Scanner(System.in);
+    private static int bookIdCounter = 1;
+    private static int patronIdCounter = 1;
+    
+    public static void main(String[] args) {
+        int choice;
+        do {
+            showMenu();
+            choice = scanner.nextInt();
+            scanner.nextLine();  // Consume newline
+            switch (choice) {
+                case 1: addBook(); break;
+                case 2: removeBook(); break;
+                case 3: listBooks(); break;
+                case 4: addPatron(); break;
+                case 5: removePatron(); break;
+                case 6: listPatrons(); break;
+                case 7: borrowBook(); break;
+                case 8: returnBook(); break;
+                case 9: viewTransactions(); break;
+                case 10: searchBooks(); break;
+                case 0: System.out.println("Exiting..."); break;
+                default: System.out.println("Invalid option! Try again."); break;
+            }
+        } while (choice != 0);
+    }
+
+    private static void showMenu() {
+        System.out.println("\nLibrary Management System");
+        System.out.println("1. Add Book");
+        System.out.println("2. Remove Book");
+        System.out.println("3. List Books");
+        System.out.println("4. Add Patron");
+        System.out.println("5. Remove Patron");
+        System.out.println("6. List Patrons");
+        System.out.println("7. Borrow Book");
+        System.out.println("8. Return Book");
+        System.out.println("9. View Transactions");
+        System.out.println("10. Search Books");
+        System.out.println("0. Exit");
+        System.out.print("Enter your choice: ");
+    }
+
+    // Book Management
+    private static void addBook() {
+        System.out.print("Enter book title: ");
+        String title = scanner.nextLine();
+        System.out.print("Enter book author: ");
+        String author = scanner.nextLine();
+        books.put(bookIdCounter, new Book(bookIdCounter, title, author));
+        System.out.println("Book added with ID: " + bookIdCounter);
+        bookIdCounter++;
+    }
+
+    private static void removeBook() {
+        System.out.print("Enter book ID to remove: ");
+        int bookId = scanner.nextInt();
+        if (books.containsKey(bookId)) {
+            books.remove(bookId);
+            System.out.println("Book removed successfully.");
+        } else {
+            System.out.println("Book not found.");
+        }
+    }
+
+    private static void listBooks() {
+        if (books.isEmpty()) {
+            System.out.println("No books available.");
+        } else {
+            System.out.println("\nBooks in Library:");
+            for (Book book : books.values()) {
+                System.out.println(book);
+            }
+        }
+    }
+
+    // Patron Management
+    private static void addPatron() {
+        System.out.print("Enter patron name: ");
+        String name = scanner.nextLine();
+        patrons.put(patronIdCounter, new Patron(patronIdCounter, name));
+        System.out.println("Patron added with ID: " + patronIdCounter);
+        patronIdCounter++;
+    }
+
+    private static void removePatron() {
+        System.out.print("Enter patron ID to remove: ");
+        int patronId = scanner.nextInt();
+        if (patrons.containsKey(patronId)) {
+            patrons.remove(patronId);
+            System.out.println("Patron removed successfully.");
+        } else {
+            System.out.println("Patron not found.");
+        }
+    }
+
+    private static void listPatrons() {
+        if (patrons.isEmpty()) {
+            System.out.println("No patrons available.");
+        } else {
+            System.out.println("\nPatrons in Library:");
+            for (Patron patron : patrons.values()) {
+                System.out.println(patron);
+            }
+        }
+    }
+
+    // Borrow and Return Books
+    private static void borrowBook() {
+        System.out.print("Enter patron ID: ");
+        int patronId = scanner.nextInt();
+        if (!patrons.containsKey(patronId)) {
+            System.out.println("Patron not found.");
+            return;
+        }
+        System.out.print("Enter book ID to borrow: ");
+        int bookId = scanner.nextInt();
+        if (!books.containsKey(bookId)) {
+            System.out.println("Book not found.");
+            return;
+        }
+        Book book = books.get(bookId);
+        if (book.isAvailable()) {
+            book.setAvailable(false);
+            transactions.add(new Transaction(patronId, bookId, "borrow"));
+            System.out.println("Book borrowed successfully.");
+        } else {
+            System.out.println("Book is currently unavailable.");
+        }
+    }
+
+    private static void returnBook() {
+        System.out.print("Enter patron ID: ");
+        int patronId = scanner.nextInt();
+        System.out.print("Enter book ID to return: ");
+        int bookId = scanner.nextInt();
+        if (!books.containsKey(bookId)) {
+            System.out.println("Book not found.");
+            return;
+        }
+        Book book = books.get(bookId);
+        if (!book.isAvailable()) {
+            book.setAvailable(true);
+            transactions.add(new Transaction(patronId, bookId, "return"));
+            System.out.println("Book returned successfully.");
+        } else {
+            System.out.println("Book was not borrowed.");
+        }
+    }
+
+    private static void viewTransactions() {
+        if (transactions.isEmpty()) {
+            System.out.println("No transactions available.");
+        } else {
+            System.out.println("\nTransactions:");
+            for (Transaction transaction : transactions) {
+                System.out.println(transaction);
+            }
+        }
+    }
+
+    private static void searchBooks() {
+        System.out.print("Enter search term (title/author): ");
+        String term = scanner.nextLine();
+        boolean found = false;
+        for (Book book : books.values()) {
+            if (book.getTitle().toLowerCase().contains(term.toLowerCase()) ||
+                book.getAuthor().toLowerCase().contains(term.toLowerCase())) {
+                System.out.println(book);
+                found = true;
+            }
+        }
+        if (!found) {
+            System.out.println("No books found matching your search.");
+        }
+    }
+}

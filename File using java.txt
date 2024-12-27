@@ -1,0 +1,138 @@
+public class Fibonacci {
+    public static void main(String[] args) {
+        int n = 10; // Number of terms
+        int a = 0, b = 1;
+        System.out.print("Fibonacci Series: " + a + ", " + b);
+        for (int i = 2; i < n; i++) {
+            int next = a + b;
+            System.out.print(", " + next);
+            a = b;
+            b = next;
+        }
+    }
+}
+public class Factorial {
+    public static void main(String[] args) {
+        int number = 5;
+        System.out.println("Factorial of " + number + " is: " + factorial(number));
+    }
+
+    static int factorial(int n) {
+        if (n == 0) return 1;
+        return n * factorial(n - 1);
+    }
+}
+public class PrimeCheck {
+    public static void main(String[] args) {
+        int number = 29;
+        if (isPrime(number)) {
+            System.out.println(number + " is a prime number.");
+        } else {
+            System.out.println(number + " is not a prime number.");
+        }
+    }
+
+    static boolean isPrime(int n) {
+        if (n <= 1) return false;
+        for (int i = 2; i <= Math.sqrt(n); i++) {
+            if (n % i == 0) return false;
+        }
+        return true;
+    }
+}
+public class ReverseString {
+    public static void main(String[] args) {
+        String original = "Hello, World!";
+        String reversed = new StringBuilder(original).reverse().toString();
+        System.out.println("Reversed String: " + reversed);
+    }
+}
+public class PalindromeCheck {
+    public static void main(String[] args) {
+        String str = "madam";
+        if (isPalindrome(str)) {
+            System.out.println(str + " is a palindrome.");
+        } else {
+            System.out.println(str + " is not a palindrome.");
+        }
+    }
+
+    static boolean isPalindrome(String s) {
+        String reversed = new StringBuilder(s).reverse().toString();
+        return s.equals(reversed);
+    }
+}
+import java.util.Arrays;
+
+public class SortArray {
+    public static void main(String[] args) {
+        int[] arr = {5, 2, 8, 1, 3};
+        Arrays.sort(arr);
+        System.out.println("Sorted Array: " + Arrays.toString(arr));
+    }
+}
+public class BinarySearch {
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+        int target = 5;
+        int result = binarySearch(arr, target);
+        if (result == -1) {
+            System.out.println("Element not found.");
+        } else {
+            System.out.println("Element found at index: " + result);
+        }
+    }
+
+    static int binarySearch(int[] arr, int target) {
+        int left = 0, right = arr.length - 1;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            if (arr[mid] == target) return mid;
+            if (arr[mid] < target) left = mid + 1;
+            else right = mid - 1;
+        }
+        return -1;
+    }
+}
+import java.util.Arrays;
+
+public class MergeSortedArrays {
+    public static void main(String[] args) {
+        int[] arr1 = {1, 3, 5};
+        int[] arr2 = {2, 4, 6};
+        int[] merged = merge(arr1, arr2);
+        System.out.println("Merged Array: " + Arrays.toString(merged));
+    }
+
+    static int[] merge(int[] arr1, int[] arr2) {
+        int[] merged = new int[arr1.length + arr2.length];
+        int i = 0, j = 0, k = 0;
+        while (i < arr1.length && j < arr2.length) {
+            if (arr1[i] < arr2[j]) {
+                merged[k++] = arr1[i++];
+            } else {
+                merged[k++] = arr2[j++];
+            }
+        }
+        while (i < arr1.length) {
+            merged[k++] = arr1[i++];
+        }
+        while (j < arr2.length) {
+            merged[k++] = arr2[j++];
+        }
+        return merged;
+    }
+}
+public class CountVowels {
+    public static void main(String[] args) {
+        String str = "Hello, World!";
+        int count = countVowels(str);
+        System.out.println("Number of vowels: " + count);
+    }
+
+    static int countVowels(String s) {
+        int count = 0;
+        for (char c : s.toLowerCase().toCharArray()) {
+            if ("aeiou".indexOf(c) != -1) {
+                count++;
+            }
